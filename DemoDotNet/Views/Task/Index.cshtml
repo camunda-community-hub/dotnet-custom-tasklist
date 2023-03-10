@@ -111,7 +111,7 @@
         data = {};
         $.ajax({
             type: "POST",
-            url: '@Url.Action("ClaimTask", "Task")' + '?taskId=' + $("#hidden-task-id").val() + '&user=samlp|Okta|jothikiruthika.viswanathan@camunda.com',
+            url: '@Url.Action("ClaimTask", "Task")' + '?taskId=' + $("#hidden-task-id").val() + '&user=jothikiruthika.viswanathan@camunda.com',
             data: JSON.stringify(data),
             success: function (data) {
                 alert("Task Claimed Successfully!");
@@ -171,7 +171,7 @@
 
     function loadInHandTasks() {
 
-        var allopenTasksUrl = '@Url.Action("GetTasksByUser", "Task")' +'?user=samlp|Okta|jothikiruthika.viswanathan@camunda.com';
+        var allopenTasksUrl = '@Url.Action("GetTasksByUser", "Task")' +'?user=jothikiruthika.viswanathan@camunda.com';
 
         $.getJSON(allopenTasksUrl)
             .done(function (responseData) {
@@ -197,7 +197,7 @@
 
     function loadCompletedTasks() {
 
-        var compTasksUrl = '@Url.Action("GetCompletedTasks", "Task")' +'?user=samlp|Okta|jothikiruthika.viswanathan@camunda.com';
+        var compTasksUrl = '@Url.Action("GetCompletedTasks", "Task")' +'?user=jothikiruthika.viswanathan@camunda.com';
 
         $.getJSON(compTasksUrl)
             .done(function (responseData) {
