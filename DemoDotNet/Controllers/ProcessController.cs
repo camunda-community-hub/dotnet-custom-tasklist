@@ -93,13 +93,14 @@ namespace DemoDotNet.Controllers
                 var ClientID = _configuration.GetValue<string>("clientid");
                 var ClientSecret = _configuration.GetValue<string>("clientsecret");
                 var clusterId = _configuration.GetValue<string>("clusterId");
-                var ClusterAddress = clusterId + ".dsm-1.zeebe.camunda.io:443";
+                var region = _configuration.GetValue<string>("region");
+                var ClusterAddress = $"{clusterId}.{region}.zeebe.camunda.io:443";
 
                 return CamundaCloudClientBuilder.Builder()
                                   .UseClientId(ClientID)
                                   .UseClientSecret(ClientSecret)
                                   .UseContactPoint(ClusterAddress)
-                                  //.UseLoggerFactory(new NLogLoggerFactory()) // optional
+                                  //.UseLoggerFactory(new NLogLoggerFactory())
                                   .Build();
             }
             else if (_configuration.GetValue<bool>("plainTextSecurity"))
