@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Exposure\" />
+    <None Remove="zb-client" />
+    <None Remove="GraphQL.Client" />
+    <None Remove="GraphQL.Client.Serializer.Newtonsoft" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Views\Task\" />
+    <None Remove="Services\" />
+    <None Remove="zb-client-accelerator" />
+    <None Remove="Dtos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Process\" />
+    <Folder Include="Views\Task\" />
+    <Folder Include="Services\" />
+    <Folder Include="Dtos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="zb-client" Version="1.2.1" />
+    <PackageReference Include="GraphQL.Client" Version="5.1.0" />
+    <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="5.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="zb-client-accelerator" Version="1.0.0" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,272 @@
+﻿@{
+    ViewData["Title"] = "Camunda 8 - Demo Home";
+}
+<style>
+    .border-ridge {
+        border-style: ridge;
+    }
+</style>
+<div class="d-flex flex-nowrap pb-3  bg-light" id="acceptance-approval">
+    <div class="d-flex flex-column flex-shrink-0 text-bg-dark border-ridge" style="width: 420px;">
+        <div class="p-3">
+            <span class="fs-5 fw-semibold" id="toggle-open-tasks"> <a href="#">Open Tasks</a> </span>
+        </div>
+        <div id="open-tasks-list" class="list-group list-group-flush border-bottom scrollarea">
+
+        </div>
+        <div class="p-3">
+            <span class="fs-5 fw-semibold" id="toggle-inhand"><a href="#">In-Hand Tasks</a> </span>
+        </div>
+        <div id="inhand-list" class="list-group list-group-flush border-bottom scrollarea">
+
+        </div>
+        <div class="p-3">
+            <span class="fs-5 fw-semibold" id="toggle-completed"><a href="#">Completed Tasks</a> </span>
+        </div>
+        <div id="completed-list" class="list-group list-group-flush border-bottom scrollarea">
+
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="d-flex flex-column flex-shrink-0 bg-light w-50 border-ridge">
+        <div id="task-details" class="grid" style="display:none">
+            <div style="padding:15px;"><strong>Task Details for User Action</strong></div>
+            <form id="createRisk">
+
+                <div class="form-group pt-20" id="free-variables">
+                </div><div style="padding: 0px 15px 15px 15px;">
+                    <div style="margin-top:20px">
+                        <input type="hidden" id="hidden-task-id">
+                        <button class="btn btn-primary" id="claim">Claim Task</button>
+                    </div>
+                    <div style="margin-top:20px">
+                        <input type="hidden" id="hidden-task-id">
+                        <button class="btn btn-primary" id="accept-approve">Complete Task</button>
+                    </div>
+                    <div style="margin-top:20px">
+                        <input type="hidden" id="hidden-task-id">
+                        <button class="btn btn-primary" id="unclaim">UnClaim Task</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        refreshList();
+        $("#toggle-open-tasks").click(function () {
+            $("#open-tasks-list").toggle();
+        });
+        $("#toggle-inhand").click(function () {
+            $("#inhand-list").toggle();
+        });
+        $("#toggle-completed").click(function () {
+            $("#completed-list").toggle();
+        });
+
+        $("#accept-approve").click(function () {
+            completeTask();
+            return false;
+        });
+        $("#claim").click(function () {
+            claimTask();
+            return false;
+        });
+        $("#unclaim").click(function () {
+            unclaimTask();
+        });
+    });
+
+    function refreshList() {
+        $("#task-details").hide();
+        loadAllTasks();
+    }
+
+    function loadAllTasks() {
+        loadOpenTasks();
+        loadInHandTasks();
+        loadCompletedTasks();
+    }
+
+    function completeTask() {
+        data = {};
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CompleteTask", "Task")' + '?taskId=' + $("#hidden-task-id").val(),
+            data: JSON.stringify(data),
+            success: function (data) {
+                alert("Task completed Successfully!");
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err.responseText);   // <-- printing error message to console
+            },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        });
+    }
+
+    function claimTask() {
+        data = {};
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ClaimTask", "Task")' + '?taskId=' + $("#hidden-task-id").val() + '&user=samlp|Okta|jothikiruthika.viswanathan@camunda.com',
+            data: JSON.stringify(data),
+            success: function (data) {
+                alert("Task Claimed Successfully!");
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err.responseText);   // <-- printing error message to console
+            },
+            dataType: "json", //important setting 
+            contentType: "application/json; charset=utf-8"
+        });        
+    }
+
+    function unclaimTask() {
+        data = {};
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UnClaimTask", "Task")' + '?taskId=' + $("#hidden-task-id").val(),
+            data: JSON.stringify(data),
+            success: function (data) {
+                alert("Task Un-claimed Successfully!");
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err.responseText);   // <-- printing error message to console
+            },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        });
+    }
+
+    function loadOpenTasks() {
+
+        var allopenTasksUrl = '@Url.Action("GetOpenTasks", "Task")';
+
+        $.getJSON(allopenTasksUrl)
+            .done(function (responseData) {
+
+                $.each(responseData.tasks, function (index, data) {
+                    riskDetails = '';
+                    $.each(data.variables, function (i, d) {
+                        riskDetails += "<div class='col-10 mb-1 small'>" + d.name + " : " + d.value + "</div>";
+                    });
+
+                    text = " <a class='list-group-item list-group-item-action py-3 lh-sm' href='#' onclick='loadOpenTask(" + data.id + ");'><div> <strong class='mb-1'>" + data.name + "</strong></div><small class='text-muted'>Created at : " + data.creationTime + "</small> </a>";
+                    //<div class='col-10 mb-2 mt-2'><strong>Risk Details -></strong></div> "+riskDetails+"</a>" ;
+                    $("#open-tasks-list").append(text);
+
+                })
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Failed to load all open tasks: " + err);
+            });
+
+    }
+
+    function loadInHandTasks() {
+
+        var allopenTasksUrl = '@Url.Action("GetTasksByUser", "Task")' +'?user=samlp|Okta|jothikiruthika.viswanathan@camunda.com';
+
+        $.getJSON(allopenTasksUrl)
+            .done(function (responseData) {
+
+                $.each(responseData.tasks, function (index, data) {
+                    riskDetails = '';
+                    $.each(data.variables, function (i, d) {
+                        riskDetails += "<div class='col-10 mb-1 small'>" + d.name + " : " + d.value + "</div>";
+                    });
+
+                    text = " <a class='list-group-item list-group-item-action py-3 lh-sm' href='#' onclick='loadInHandTask(" + data.id + ");'><div> <strong class='mb-1'>" + data.name + "</strong></div><small class='text-muted'>Created at : " + data.creationTime + "</small> </a>";
+                    //<div class='col-10 mb-2 mt-2'><strong>Risk Details -></strong></div> "+riskDetails+"</a>" ;
+                    $("#inhand-list").append(text);
+
+                })
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Failed to load in hand tasks: " + err);
+            });
+
+    }
+
+    function loadCompletedTasks() {
+
+        var compTasksUrl = '@Url.Action("GetCompletedTasks", "Task")' +'?user=samlp|Okta|jothikiruthika.viswanathan@camunda.com';
+
+        $.getJSON(compTasksUrl)
+            .done(function (responseData) {
+
+                $.each(responseData.tasks, function (index, data) {
+
+                    riskDetails = '';
+                    $.each(data.variables, function (i, d) {
+                        riskDetails += "<div class='col-10 mb-1 small'>" + d.name + " : " + d.value + "</div>";
+                    });
+
+                    text = " <a class='list-group-item list-group-item-action py-3 lh-sm' href='#' onclick='loadCompTask(" + data.id + ");'><div> <strong class='mb-1'>" + data.name + "</strong></div><small class='text-muted'>Created at : " + data.creationTime + "</small> </a>";
+                    //<div class='col-10 mb-2 mt-2'><strong>Risk Details -></strong></div> "+riskDetails+"</a>" ;
+                    $("#completed-list").append(text);
+
+                })
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Failed to load in completed tasks: " + err);
+            });
+
+    }
+
+    function loadTask(taskId) {
+        $.getJSON('@Url.Action("GetTask", "Task")' + '?taskid=' +taskId, function (data) {
+            $("#hidden-task-id").val(data.task.id);
+            $("#free-variables").empty();
+            $("#free-variables").append("<div class='col-10 mb-1 medium'>" + " Assignee : " + data.task.assignee + "</div>");
+            $("#free-variables").append("<div class='col-10 mb-1 medium'>" + " processName : " + data.task.processName + "</div>");
+            $("#free-variables").append("<div class='col-10 mb-1 medium'>" + " formKey : " + data.task.formKey + "</div>");
+            $("#free-variables").append("<div class='col-10 mb-1 medium'>" + " creationTime : " + data.task.creationTime + "</div>");
+            $("#free-variables").append("<div class='col-10 mb-1 medium'> <strong> Process Variables :</strong> </div>");
+            $.each(data.task.variables, function (i, d) {
+                 $("#free-variables").append("<div class='col-10 mb-1 small'>" + d.name + " : " + d.value + "</div>");
+            });
+            $("#task-details").show();
+        });
+    }
+
+    function loadOpenTask(taskId) {
+        setOpenMode();
+        loadTask(taskId);
+    }
+
+    function loadInHandTask(taskId) {
+        setInHandMode();
+        loadTask(taskId);
+    }
+
+    function loadCompTask(taskId) {
+        setCompMode();
+        loadTask(taskId);}
+
+    function setInHandMode() {
+        $("#unclaim").show();
+        $("#accept-approve").show();
+        $("#claim").hide();
+    }
+
+    function setOpenMode() {
+        $("#unclaim").hide();
+        $("#accept-approve").hide();
+        $("#claim").show();
+    }
+
+    function setCompMode() {
+        $("#unclaim").hide();
+        $("#accept-approve").hide();
+        $("#claim").hide();
+    }
+</script>

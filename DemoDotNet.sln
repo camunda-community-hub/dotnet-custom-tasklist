@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1704.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoDotNet", "DemoDotNet\DemoDotNet.csproj", "{CE97210D-601E-47B6-B87F-9BCE96934167}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{FFFE6CB9-D970-4EEA-9BFF-37C78170F1B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{A37A87D1-78B9-4DDA-83DB-A47B7B2E9506}"
+	ProjectSection(SolutionItems) = preProject
+		customer_onboarding_en.bpmn = customer_onboarding_en.bpmn
+		document_request_en.bpmn = document_request_en.bpmn
+		risk_check_en.dmn = risk_check_en.dmn
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE97210D-601E-47B6-B87F-9BCE96934167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE97210D-601E-47B6-B87F-9BCE96934167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE97210D-601E-47B6-B87F-9BCE96934167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE97210D-601E-47B6-B87F-9BCE96934167}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C872E898-E5DD-4411-A506-55766189935B}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A37A87D1-78B9-4DDA-83DB-A47B7B2E9506} = {FFFE6CB9-D970-4EEA-9BFF-37C78170F1B2}
+	EndGlobalSection
+EndGlobal
