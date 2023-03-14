@@ -4,6 +4,8 @@
 
 A custom tasklist is implemented by the TaskController's Index action. 
 
+Click on the Task Category to expand / collapse the list of tasks. The UI is WIP.
+
 Once you have some user tasks awaiting action, you can see them appearing in the Open tasks section.
 Once Claimed they move to the Claimed section.
 Once completed, they are then displayed in the COmpleted tasks section.

@@ -27,10 +27,7 @@ namespace DemoDotNet.Controllers
 {  
 
     public class TaskController : Controller
-    {
-        private static readonly string ClientID = "-t7aIPxvCA.gGdnv37NTKqikbjpmIXtY";
-        private static readonly string ClientSecret = "3iUPxg0zNF.xu2K7~AlxAUo9dt0yXGjMNfNm~l8fhoDBc7SN58zCwxLbQ8t6mrPG";
-        private static readonly string ClusterAddress = "2f2c62c7-173c-4846-a972-f63b564fe26f.dsm-1.zeebe.camunda.io:443";
+    {       
         private readonly ILogger<TaskController> _logger;
         private readonly TaskListAuthentication _taskListAuthentication;
         private readonly IConfiguration _configuration;
