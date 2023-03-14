@@ -28,7 +28,6 @@ namespace DemoDotNet
             services.AddMemoryCache();
             services.AddControllersWithViews();
             services.AddTransient(typeof(TaskListAuthentication));
-            //services.BootstrapZeebe(hostContext.Configuration.GetSection("ZeebeConfiguration"),  this.GetType().Assembly);
             services.BootstrapZeebe(Configuration.GetSection("ZeebeConfiguration"),typeof(Program).Assembly);
         }
 

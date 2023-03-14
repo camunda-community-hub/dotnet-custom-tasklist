@@ -8,11 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{FFFE6CB9-D970-4EEA-9BFF-37C78170F1B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{A37A87D1-78B9-4DDA-83DB-A47B7B2E9506}"
-	ProjectSection(SolutionItems) = preProject
-		customer_onboarding_en.bpmn = customer_onboarding_en.bpmn
-		document_request_en.bpmn = document_request_en.bpmn
-		risk_check_en.dmn = risk_check_en.dmn
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
