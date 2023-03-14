@@ -5,7 +5,7 @@
 A custom tasklist is implemented by the TaskController's Index action. 
 
 Once you have some user tasks awaiting action, you can see them appearing in the Open tasks section.
-Once Claimed they move to the inhand section.
+Once Claimed they move to the Claimed section.
 Once completed, they are then displayed in the COmpleted tasks section.
 
 To connect to a Saas Instance, use the below settings in the appsettings.json -

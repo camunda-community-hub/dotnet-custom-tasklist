@@ -14,12 +14,14 @@
     <None Remove="Services\" />
     <None Remove="zb-client-accelerator" />
     <None Remove="Dtos\" />
+    <None Remove="Workers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Process\" />
     <Folder Include="Views\Task\" />
     <Folder Include="Services\" />
     <Folder Include="Dtos\" />
+    <Folder Include="Workers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="zb-client" Version="1.2.1" />
