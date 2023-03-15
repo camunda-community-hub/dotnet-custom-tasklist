@@ -1,6 +1,6 @@
 # zeebe-dotnet-client
 
-#### A dotnet client for the Zeebe engine & task list API.
+#### A dotnet client for the Camunda 8 zeebe & task list API.
 
 A custom tasklist is implemented by the TaskController's Index action. 
 
