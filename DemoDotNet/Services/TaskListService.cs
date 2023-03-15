@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using GraphQL.Client.Http;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
-using GraphQL.Client.Serializer.Newtonsoft;
+
 using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 using static DemoDotNet.Models.Models;
@@ -14,18 +14,18 @@ namespace DemoDotNet.Services
 {
 	public class TaskListService
 	{
-        private readonly TaskListAuthentication _taskListAuthentication;
+        private readonly TaskListClientProvider _taskListClientProvider;
         private readonly IConfiguration _configuration;
 
-        public TaskListService(TaskListAuthentication taskListAuthentication, IMemoryCache memoryCache, IConfiguration configuration)
+        public TaskListService(TaskListClientProvider taskListClientService, IMemoryCache memoryCache, IConfiguration configuration)
 		{
-            _taskListAuthentication = taskListAuthentication;
+            _taskListClientProvider = taskListClientService;
             _configuration = configuration;
         }
 
         public async Task<List<Models.Models.Task>> FetchAllTasks()
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
             var tasksRequest = new GraphQLRequest
             {
                 Query = @"
@@ -62,7 +62,7 @@ namespace DemoDotNet.Services
         
         public async Task<Models.Models.Task> GetTask(string taskId)
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
 
             var tasksRequest = new GraphQLRequest
             {
@@ -103,7 +103,7 @@ namespace DemoDotNet.Services
 
         public async Task<List<Models.Models.Task>> GetTaskByProcessInstanceId(string processInstanceId)
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
 
             var tasksRequest = new GraphQLRequest
             {
@@ -144,7 +144,7 @@ namespace DemoDotNet.Services
 
         public async Task<List<Models.Models.Task>> GetTasksByUser(string user)
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
 
             var tasksRequest = new GraphQLRequest
             {
@@ -178,7 +178,7 @@ namespace DemoDotNet.Services
 
         public async Task<List<Models.Models.Task>> GetCompletedTasks(string user)
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
 
             var tasksRequest = new GraphQLRequest
             {
@@ -211,7 +211,7 @@ namespace DemoDotNet.Services
 
         public async Task<Models.Models.Task> ClaimTask(string taskId, string user)
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
 
             var mutationRequest = new GraphQLRequest
             {
@@ -258,7 +258,7 @@ namespace DemoDotNet.Services
 
         public async Task<Models.Models.Task> UnClaimTask(string taskId)
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
 
             var mutationRequest = new GraphQLRequest
             {
@@ -303,7 +303,7 @@ namespace DemoDotNet.Services
 
         public async Task<Models.Models.Task> CompleteTask(string taskId)
         {
-            var graphQLClient = await GetTaskListClientAsync();
+            var graphQLClient = await _taskListClientProvider.GetTaskListClientAsync();
 
             var mutationRequest = new GraphQLRequest
             {
@@ -345,26 +345,7 @@ namespace DemoDotNet.Services
             return mutationResponse.Data.completeTask;
         }
 
-        private async Task<GraphQLHttpClient> GetTaskListClientAsync()
-        {
-            //TASKLIST API
-            var tasklistBaseUrl = _configuration.GetValue<string>("tasklistUrl");
-            var taskListUrl = @tasklistBaseUrl + "/graphql";
-            var graphQLHttpClientOptions = new GraphQLHttpClientOptions
-            {
-                EndPoint = new Uri(taskListUrl)
-            };
-
-            var bearerValue = await _taskListAuthentication.GetTaskListAuthenticationAsync();
-            var token = $"Bearer {bearerValue}";
-
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization", token);
-
-            var graphQLClient = new GraphQLHttpClient(graphQLHttpClientOptions, new NewtonsoftJsonSerializer(), httpClient);
-
-            return graphQLClient;
-        }
+        
     }
 }
 

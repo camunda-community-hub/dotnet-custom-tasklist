@@ -5,20 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using DemoDotNet.Models;
 using Google.Apis.Auth.OAuth2;
+using GraphQL.Client.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using GraphQL.Client.Serializer.Newtonsoft;
 
 namespace DemoDotNet.Services
 {
-	public class TaskListAuthentication
-	{
-        public class credentials {
+    public class TaskListClientProvider
+    {
+        public class credentials
+        {
             public string client_id { get; set; }
             public string client_secret { get; set; }
-            public string grant_type  { get; set; }
-        public string audience  { get; set; }
-}
+            public string grant_type { get; set; }
+            public string audience { get; set; }
+        }
 
         private readonly IMemoryCache _memoryCache;
         private readonly IConfiguration _configuration;
@@ -29,24 +32,45 @@ namespace DemoDotNet.Services
         private String keycloakRealm = "camunda-platform";
         private String saasTokenUrl = "https://login.cloud.camunda.io/oauth/token";
 
-        public TaskListAuthentication(IMemoryCache memoryCache, IConfiguration configuration)
-		{
-			_memoryCache = memoryCache;
+        public TaskListClientProvider(IMemoryCache memoryCache, IConfiguration configuration)
+        {
+            _memoryCache = memoryCache;
             _configuration = configuration;
         }
 
-        public async Task<string> GetTaskListAuthenticationAsync()
+        public async Task<GraphQLHttpClient> GetTaskListClientAsync()
+        {
+            //TASKLIST API
+            var tasklistBaseUrl = _configuration.GetValue<string>("tasklistUrl");
+            var taskListUrl = @tasklistBaseUrl + "/graphql";
+            var graphQLHttpClientOptions = new GraphQLHttpClientOptions
+            {
+                EndPoint = new Uri(taskListUrl)
+            };
+
+            var bearerValue = await GetTaskListAuthenticationAsync();
+            var token = $"Bearer {bearerValue}";
+
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Authorization", token);
+
+            var graphQLClient = new GraphQLHttpClient(graphQLHttpClientOptions, new NewtonsoftJsonSerializer(), httpClient);
+
+            return graphQLClient;
+        }
+
+        private async Task<string> GetTaskListAuthenticationAsync()
         {
             if (!_memoryCache.TryGetValue(AuthToken_CacheKey, out string bearerToken))
             {
-                bearerToken =  await GetBearerTokenForTaskList();
+                bearerToken = await GetBearerTokenForTaskList();
                 var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(DateTime.Now.AddSeconds(280));
                 _memoryCache.Set(AuthToken_CacheKey, bearerToken, cacheEntryOptions);
             }
             return bearerToken;
         }
 
-        public async Task<string> GetBearerTokenForTaskList()
+        private async Task<string> GetBearerTokenForTaskList()
         {
             var isCloudInstance = _configuration.GetValue<bool>("isCloud");
             var gatewayAddress = _configuration.GetValue<string>("gatewayAddress");
@@ -55,20 +79,21 @@ namespace DemoDotNet.Services
             {
                 return await GetBearerTokenForSaas();
             }
-            else {
-               return await GetBearerTokenForSelfManagedAsync();
+            else
+            {
+                return await GetBearerTokenForSelfManagedAsync();
             }
 
         }
 
-        public async Task<string> GetBearerTokenForSaas()
+        private async Task<string> GetBearerTokenForSaas()
         {
             var client = new HttpClient();
 
             var cloudClientid = _configuration.GetValue<string>("clientid");
             var cloudClientSecret = _configuration.GetValue<string>("clientsecret");
 
-            var collection = new credentials { client_id = cloudClientid, client_secret = cloudClientSecret, grant_type = "client_credentials", audience= "tasklist.camunda.io" };
+            var collection = new credentials { client_id = cloudClientid, client_secret = cloudClientSecret, grant_type = "client_credentials", audience = "tasklist.camunda.io" };
 
             var stringPayload = JsonConvert.SerializeObject(collection);
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
@@ -82,12 +107,12 @@ namespace DemoDotNet.Services
             return jsonString.access_token;
         }
 
-        public async Task<string> GetBearerTokenForSelfManagedAsync()
+        private async Task<string> GetBearerTokenForSelfManagedAsync()
         {
             keycloakUrl = _configuration.GetValue<string>("keycloakUrl");
-           
+
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, keycloakUrl+"/auth/realms/camunda-platform/protocol/openid-connect/token");
+            var request = new HttpRequestMessage(HttpMethod.Post, keycloakUrl + "/auth/realms/camunda-platform/protocol/openid-connect/token");
 
             var identityClientId = _configuration.GetValue<string>("identityClientid");
             var identityClientSecret = _configuration.GetValue<string>("identityClientsecret");
@@ -106,20 +131,7 @@ namespace DemoDotNet.Services
             var result = await response.Content.ReadAsStringAsync();
             var jsonString = Newtonsoft.Json.JsonConvert.DeserializeObject<TaskListAuthDto>(result);
             return jsonString.access_token;
-        }
-
-        public HttpContent getContent()
-        {
-            var identityClientId = _configuration.GetValue<string>("identityClientid");
-            var identityClientSecret = _configuration.GetValue<string>("identityClientsecret");
-
-            var collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new KeyValuePair<string, string>("client_id", identityClientId));
-            collection.Add(new KeyValuePair<string, string>("client_secret", identityClientSecret));
-            collection.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
-
-            return new FormUrlEncodedContent(collection);
-        }
-	}
+        }        
+    }
 }
 
