@@ -1,9 +1,6 @@
 [![Community Extension](https://img.shields.io/badge/Community%20Extension-An%20open%20source%20community%20maintained%20project-FF4700)](https://github.com/camunda-community-hub/community)
 ![Compatible with: Camunda Platform 8](https://img.shields.io/badge/Compatible%20with-Camunda%20Platform%208-0072Ce)
 [![](https://img.shields.io/badge/Lifecycle-Incubating-blue)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#incubating-)
-### A C# Client for Zeebe
-
-Process controller has examples of Deploying Processes/DMNs, Creating Process Instances & updating Process Variables.
 
 ### Job Workers based on .Net Hosted Services
 
@@ -66,3 +63,7 @@ To connect to a Self Managed Instance, use the below settings in the appsettings
 Generate the identityClientid & identityClientsecret, for the tasklist authentication, as outlined below in the documentation -
 
 https://docs.camunda.io/docs/8.0/self-managed/tasklist-deployment/tasklist-authentication/#use-identity-jwt-token-to-access-tasklist-api
+
+### C# Client for Zeebe gateway
+
+Process controller has examples of Deploying Processes/DMNs, Creating Process Instances & updating Process Variables. This is WIP, to create a UI to deploy processes / decisions & create Process instances / evaluate decisions. 
