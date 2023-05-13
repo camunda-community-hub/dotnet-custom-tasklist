@@ -41,7 +41,7 @@ namespace DemoDotNet.Services
         public async Task<GraphQLHttpClient> GetTaskListClientAsync()
         {
             //TASKLIST API
-            var tasklistBaseUrl = _configuration.GetValue<string>("tasklistUrl");
+            var tasklistBaseUrl = _configuration.GetValue<string>("TasklistUrl");
             var taskListUrl = @tasklistBaseUrl + "/graphql";
             var graphQLHttpClientOptions = new GraphQLHttpClientOptions
             {
@@ -72,8 +72,8 @@ namespace DemoDotNet.Services
 
         private async Task<string> GetBearerTokenForTaskList()
         {
-            var isCloudInstance = _configuration.GetValue<bool>("isCloud");
-            var gatewayAddress = _configuration.GetValue<string>("gatewayAddress");
+            var isCloudInstance = _configuration.GetValue<bool>("ZeebeConfiguration:Saas");
+            var gatewayAddress = _configuration.GetValue<string>("ZeebeConfiguration:GatewayAddress");
 
             if (isCloudInstance)
             {
@@ -90,8 +90,8 @@ namespace DemoDotNet.Services
         {
             var client = new HttpClient();
 
-            var cloudClientid = _configuration.GetValue<string>("clientid");
-            var cloudClientSecret = _configuration.GetValue<string>("clientsecret");
+            var cloudClientid = _configuration.GetValue<string>("ZeebeConfiguration:Client:Cloud:ClientId");
+            var cloudClientSecret = _configuration.GetValue<string>("ZeebeConfiguration:Client:Cloud:ClientSecret");
 
             var collection = new credentials { client_id = cloudClientid, client_secret = cloudClientSecret, grant_type = "client_credentials", audience = "tasklist.camunda.io" };
 
@@ -114,8 +114,8 @@ namespace DemoDotNet.Services
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, keycloakUrl + "/auth/realms/camunda-platform/protocol/openid-connect/token");
 
-            var identityClientId = _configuration.GetValue<string>("identityClientid");
-            var identityClientSecret = _configuration.GetValue<string>("identityClientsecret");
+            var identityClientId = _configuration.GetValue<string>("Identity:ClientId");
+            var identityClientSecret = _configuration.GetValue<string>("Identity:ClientSecret");
 
             var collection = new List<KeyValuePair<string, string>>();
             collection.Add(new KeyValuePair<string, string>("client_id", identityClientId));
