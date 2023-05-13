@@ -16,11 +16,21 @@ Once completed, they are then displayed in the COmpleted tasks section.
 To connect to a Saas Instance, use the below settings in the appsettings.json -
 
 ```
-"isCloud": true,
-"clientid": "XX",
-"clientsecret": "XXXX",
-"clusterId": "XX-XX-XX-XX-XX",
-"region": "dsm-1",
+{
+  "ZeebeConfiguration": {
+    "Saas": true,
+    "Client": {
+      "GatewayAddress": "your-cluster-id.your-region.zeebe.camunda.io:443", // this is the gateway address format for Saas
+
+      "Cloud": {
+        "ClientId": xx,
+        "ClientSecret": xx,
+        "AuthorizationServerUrl": "https://login.cloud.camunda.io/oauth/token",
+        "TokenAudience": "zeebe.camunda.io"
+      }
+    },
+
+  "TasklistUrl": "https://your-region.tasklist.camunda.io/your-cluster-id"
 
  ```
 
@@ -31,12 +41,20 @@ https://docs.camunda.io/docs/guides/setup-client-connection-credentials/
 To connect to a Self Managed Instance, use the below settings in the appsettings.json -
 
 ```
-"isCloud": false,
-"gatewayAddress": "127.0.0.1:26500",
-"plainTextSecurity": true, 
-"identityClientid": "xx",
-"identityClientsecret": "xx",
+"ZeebeConfiguration": {
+    "Saas": false,
+    "Client": {
+      "GatewayAddress": "127.0.0.1:300",
+      "PlainTextSecurity": false
+    }
 
+"Identity": {
+    "ClientId": "test",
+    "ClientSecret": "jTpwR1T5Crz425bse9155Yi71XCA5ava"
+  },
+
+"TasklistUrl": "http://localhost:8082",
+"KeycloakUrl": "http://localhost:18080",
  ```
 
 Generate the identityClientid & identityClientsecret, for the tasklist authentication, as outlined below in the documentation -

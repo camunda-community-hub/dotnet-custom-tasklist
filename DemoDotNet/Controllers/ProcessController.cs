@@ -44,7 +44,7 @@ namespace DemoDotNet.Controllers
         [HttpPost]
         public async Task<JsonResult> DeployProcess([FromQuery] string processName)
         {
-            var processPath = _configuration.GetValue<string>("resourcePath");
+            var processPath = _configuration.GetValue<string>("ResourcePath");
             var demoProcessPath = $"{processPath}/{processName}.bpmn";
 
             var deployResponse = await _zeebeClientProvider.GetZeebeClient().NewDeployCommand()
