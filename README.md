@@ -2,10 +2,6 @@
 ![Compatible with: Camunda Platform 8](https://img.shields.io/badge/Compatible%20with-Camunda%20Platform%208-0072Ce)
 [![](https://img.shields.io/badge/Lifecycle-Incubating-blue)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#incubating-)
 
-### Job Workers based on .Net Hosted Services
-
-This project leverages the [Zeebe csharp accelerator library](https://github.com/camunda-community-hub/zeebe-client-csharp-accelerator) to bootstrap jobworkers. For more details, please refer to this [project's Readme](https://github.com/camunda-community-hub/zeebe-client-csharp-accelerator/blob/main/README.md)
-
 ### Custom Task list based on Tasklist's GraphQL Api and MVC.Net / Jquery.
 
 A custom tasklist is implemented by the TaskController's Index action. 
@@ -16,6 +12,16 @@ Once you have some user tasks awaiting action, you can see them appearing in the
 Once Claimed they move to the Claimed section.
 Once completed, they are then displayed in the COmpleted tasks section.
 
+### Job Workers based on .Net Hosted Services
+
+This project leverages the [Zeebe csharp accelerator library](https://github.com/camunda-community-hub/zeebe-client-csharp-accelerator) to bootstrap jobworkers. For more details, please refer to this [project's Readme](https://github.com/camunda-community-hub/zeebe-client-csharp-accelerator/blob/main/README.md)
+
+### C# Client for Zeebe gateway
+
+Process controller has examples of Deploying Processes/DMNs, Creating Process Instances & updating Process Variables. This is WIP, to create a UI to deploy processes / decisions & create Process instances / evaluate decisions. 
+
+
+### Configuration
 To connect to a Saas Instance, use the below settings in the appsettings.json -
 
 ```
@@ -63,7 +69,3 @@ To connect to a Self Managed Instance, use the below settings in the appsettings
 Generate the identityClientid & identityClientsecret, for the tasklist authentication, as outlined below in the documentation -
 
 https://docs.camunda.io/docs/8.0/self-managed/tasklist-deployment/tasklist-authentication/#use-identity-jwt-token-to-access-tasklist-api
-
-### C# Client for Zeebe gateway
-
-Process controller has examples of Deploying Processes/DMNs, Creating Process Instances & updating Process Variables. This is WIP, to create a UI to deploy processes / decisions & create Process instances / evaluate decisions. 
