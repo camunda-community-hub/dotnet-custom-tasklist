@@ -109,7 +109,7 @@ namespace DemoDotNet.Services
 
         private async Task<string> GetBearerTokenForSelfManagedAsync()
         {
-            keycloakUrl = _configuration.GetValue<string>("keycloakUrl");
+            keycloakUrl = _configuration.GetValue<string>("KeycloakUrl");
 
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, keycloakUrl + "/auth/realms/camunda-platform/protocol/openid-connect/token");

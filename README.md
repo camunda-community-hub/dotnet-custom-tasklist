@@ -27,7 +27,7 @@ To connect to a Saas Instance, use the below settings in the appsettings.json -
       }
     },
 
-    "TasklistUrl": "https://your-region.tasklist.camunda.io/your-cluster-id"
+  "TasklistUrl": "https://your-region.tasklist.camunda.io/your-cluster-id"
 
  ```
 
@@ -50,6 +50,8 @@ To connect to a Self Managed Instance, use the below settings in the appsettings
     "ClientSecret": "jTpwR1T5Crz425bse9155Yi71XCA5ava"
   },
 
+"TasklistUrl": "http://localhost:8082",
+"KeycloakUrl": "http://localhost:18080",
  ```
 
 Generate the identityClientid & identityClientsecret, for the tasklist authentication, as outlined below in the documentation -
