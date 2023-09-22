@@ -60,7 +60,7 @@ namespace DemoDotNet.Controllers
         public async Task<JsonResult> CreateProcessInstance([FromQuery] string processId)
         {
             //sample - sample process with some dummy variables
-            var processInstanceVariables = "{\"applicationNumber\":\"12424\", \"name\":\"Applicant1\" }";
+            var processInstanceVariables = "{\"sampleData1\":\"12424\", \"sampleData2\":\"Applicant1\" }";
             var processInstance = await _zeebeClientProvider.GetZeebeClient()
                 .NewCreateProcessInstanceCommand()
                 .BpmnProcessId(processId)
@@ -70,7 +70,7 @@ namespace DemoDotNet.Controllers
 
 
             //Refer below - setting new procecss variables
-            await _zeebeClientProvider.GetZeebeClient().NewSetVariablesCommand(processInstance.ProcessInstanceKey).Variables("{\"email\":\"jothikiruthika.viswanathan@camunda.com\" }").Local().Send();
+            await _zeebeClientProvider.GetZeebeClient().NewSetVariablesCommand(processInstance.ProcessInstanceKey).Variables("{\"email\":\"email@sample.com\" }").Local().Send();
 
             return new JsonResult(new { ProcessInstanceKey = processInstance.ProcessInstanceKey });
         }
