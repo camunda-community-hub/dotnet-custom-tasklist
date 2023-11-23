@@ -24,7 +24,7 @@
     <Folder Include="Workers\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="zb-client" Version="1.3.0" />
+    <PackageReference Include="zb-client" Version="2.3.0" />
     <PackageReference Include="GraphQL.Client" Version="5.1.0" />
     <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="5.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
